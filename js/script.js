@@ -1,7 +1,7 @@
 const guessedLettersElement = document.querySelector(".guessed-letters");
 const guessButton = document.querySelector(".guess");
 const textInput = document.querySelector(".letter")
-const progress = document.querySelector(".word-in-progress");
+const wordInProgress = document.querySelector(".word-in-progress");
 const remainingGuessesElement = document.querySelector(".remaining");
 const remainingGuessSpan = document.querySelector(".remaining span")
 const message = document.querySelector(".message");
@@ -17,7 +17,7 @@ const placeholder = function (word) {
         placeholderLetters.push("●");
     }
 
-    progress.innerText = placeholderLetters.join("");
+    wordInProgress.innerText = placeholderLetters.join("");
 };
 
 placeholder(word);
@@ -55,5 +55,42 @@ const makeGuess = function (guess) {
     } else {
     guessedLetters.push(guess);
     console.log(guessedLetters);
+    showGuessedLetters();
+    updateWordInProgress(guessedLetters);
     }  
+};
+
+const showGuessedLetters = function () {
+    guessedLettersElement.innerHTML = "";
+    //create new list item in an array
+    for (const letter of guessedLetters) {
+        const li = document.createElement("li");
+        li.innerText = letter;
+        guessedLettersElement.append(li);
+    }
+};
+
+
+const updateWordInProgress = function (guessedLetters) {
+    const wordUpper = word.toUpperCase();
+    const wordArray = wordUpper.split("");
+    //console.log(wordArray);
+    const revealWord = [];
+    for (const letter of wordArray) {
+      if (guessedLetters.includes(letter)) {
+        revealWord.push(letter.toUpperCase());
+        } else {
+            revealWord.push("●");
+        }
+    }
+    //console.log(revealWord);
+    wordInProgress.innerText = revealWord.join("");
+    checkIfWin();
+};
+
+const checkIfWin = function () {
+    if (word.toUpperCase() === wordInProgress.innerText) {
+        message.classList.add("win")
+        message.innerHTML = `<p class="highlight">You guessed the correct word! Congratz!</p>`;
+    }
 };
